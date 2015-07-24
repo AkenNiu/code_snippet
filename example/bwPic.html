@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+    <script src="../libs/grayscale.js"></script>
+    <style>
+        /*body{*/
+            /*-webkit-user-select: none;*/
+            /*-moz-user-select: none;*/
+            /*-ms-user-select: none;*/
+            /*user-select: none;*/
+        /*}*/
+        body{
+            -webkit-touch-callout: none;
+        }
+        textarea{
+            resize: none;
+        }
+        @media print{
+            #baidu:after{
+                content: "["attr(href)"]";
+            }
+        }
+    </style>
+</head>
+<body>
+<!--<img id="girl" class="girl" src="../img/1.jpg" alt=""/>-->
+<!--<textarea cols="30" rows="10"></textarea>-->
+    <a id="baidu" href="http://www.baidu.com">百度</a>
+<script>
+    window.onload = function() {
+        var oImg = document.getElementById('girl');
+        grayscale(oImg);
+
+        document.documentElement.style.webkitUserSelect = 'none';
+    }
+</script>
+</body>
+</html>
