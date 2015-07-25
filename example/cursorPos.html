@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Input元素光标位置控制</title>
+</head>
+<body>
+<input id="cursorPos" type="text" placeholder="光标永远停留在文本后"/>
+
+<div>
+<div>
+    <button id="enabledCursorPosEnd">开启光标始终在输入的文本后</button>
+    <button id="textSelectAll">全选输入文本</button>
+</div>
+<script>
+    window.onload = init();
+    var eventTypeList;
+    function init() {
+        var d = document,
+            w = window;
+        var oInput = d.getElementById('cursorPos'),
+            oBtnCursorPosEnd = d.getElementById('enabledCursorPosEnd'),
+            oBtnTextSelectAll = d.getElementById('textSelectAll');
+
+        oBtnCursorPosEnd.addEventListener('click', setCursorPosEndEnabled);
+        oBtnTextSelectAll.addEventListener('click', setTextSelectAll);
+
+        function setCursorPosEndEnabled(e) {
+            w.addEvent(oInput, 'click keyup', setCursorPos, 'end');
+        }
+
+        function setTextSelectAll() {
+            w.addEvent(oInput, 'click', setCursorPos, 'all')
+        }
+    }
+
+    function addEvent(context,eventType, fn, type) {
+        eventTypeList = eventType.split(' ');
+        context.cursorType = type;
+        for (var i = 0, l = eventTypeList.length; i < l; i ++) {
+            context.addEventListener(eventTypeList[i], fn);
+        }
+    }
+
+    function setCursorPos(e) {
+        var vLen = this.value.length;
+        if(this.setSelectionRange) {
+            //非IE
+            switch (this.cursorType) {
+                case 'end':
+                    this.setSelectionRange(vLen, vLen);
+                    break;
+                case 'all':
+                    this.setSelectionRange(0, vLen);
+                    break;
+                default:
+                    break;
+            }
+
+        } else {
+            //IE
+            var range = this.createTextRange();
+            range.moveStart('character', vLen);
+            range.collapse(true);
+            range.select();
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="http://api.map.baidu.com/api?type=quick&ak=B2Ts8Waj1D07MMIBx1cDK3qU&v=1.0"></script>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin:0;
+        }
+        #allmap{
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<p>
+    纬度：
+    <span id="latitude"></span>
+</p>
+<p>
+    经度：
+    <span id="longitude"></span>
+</p>
+<p>
+    准确度：
+    <span id="accuracy"></span>
+</p>
+
+<div id="allmap"></div>
+<script>
+    window.onload = function() {
+        navigator.geolocation.getCurrentPosition(updateLocation, locationErrorHandler, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 10000
+        });
+
+        function updateLocation(position) {
+
+            var latitude = position.coords.latitude + '',
+                longitude = position.coords.longitude + '',
+                accuracy = position.coords.accuracy + '',
+                timestamp = position.timestamp;
+
+            document.getElementById('latitude').appendChild(document.createTextNode(latitude));
+            document.getElementById('longitude').appendChild(document.createTextNode(longitude));
+            document.getElementById('accuracy').appendChild(document.createTextNode(accuracy));
+
+
+            var map = new BMap.Map("allmap");            // 创建Map实例
+            var point = new BMap.Point(longitude, latitude); // 创建点坐标
+            map.centerAndZoom(point, 19
+            );                 // 初始化地图,设置中心点坐标和地图级别。
+            map.addControl(new BMap.ZoomControl());      //添加地图缩放控件
+            var marker1 = new BMap.Marker(new BMap.Point(longitude, latitude));  //创建标注
+            map.addOverlay(marker1);
+        }
+
+        function locationErrorHandler(error) {
+            switch (error.code) {
+                case 1:
+                    alert('拒绝获取位置信息');
+                    break;
+                case 2:
+                    alert('获取位置信息失败');
+                    break;
+                case 3:
+                    alert('获取位置信息超时');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+    }
+</script>
+</body>
+</html>

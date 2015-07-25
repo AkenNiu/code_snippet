@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>固定导航条</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+        }
+        .g-hd-ctn{
+            height: 200px;
+            line-height: 200px;
+            background-color: lightblue;
+        }
+        .g-nav-ctn{
+            border-bottom: 1px solid #ddd;
+            height: 50px;
+            line-height: 50px;
+            -webkit-box-shadow:  0 2px 8px #ddd;
+            -moz-box-shadow:  0 2px 8px #ddd;
+            box-shadow:  0 2px 8px #ddd;
+            background-color: #f5f5f5;
+            z-index: 100;
+        }
+        .g-nav-ctn.fix{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+        .m-nav-list{
+            width: 80%;
+            height: 100%;
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+        .m-nav-list>li{
+            float: left;
+            width: 20%;
+            min-width: 90px;
+            height: 100%;
+            text-align: center;
+        }
+        .m-nav-list>li.active{
+            background-color: #008C9E;
+        }
+        .m-nav-list>li.active>a{
+            color: #fff;
+        }
+        .m-nav-list>li>a{
+            color: #666;
+            text-align: center;
+        }
+        .g-content-ctn li{
+            height: 50px;
+            border-bottom: 1px solid #ddd;
+        }
+        .m-soft-list{
+            background-color: lavenderblush;
+        }
+        .m-program-list{
+            background-color: cornflowerblue;
+        }
+        .m-ebook-list{
+            background-color: darkseagreen;
+        }
+    </style>
+</head>
+<body>
+<div id="j-hd-ctn" class="g-hd-ctn">
+    <h1>banner</h1>
+</div>
+<div id="j-nav-ctn" class="g-nav-ctn">
+    <ul class="m-nav-list">
+        <li class="active"><a href="#j-soft-list">软件精选</a></li>
+        <li><a href="#j-program-list">编程技术</a></li>
+        <li><a href="#j-ebook-list">电子书下载</a></li>
+        <li><a href="#j-game-list">游戏热点</a></li>
+        <li><a href="#j-music-list">音乐分享</a></li>
+    </ul>
+</div>
+<div id="j-content-ctn" class="g-content-ctn">
+    <ul id="j-soft-list" class="m-soft-list">
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+        <li>soft</li>
+    </ul>
+    <ul id="j-program-list" class="m-program-list">
+        <li>program</li>
+        <li>program</li>
+        <li>program</li>
+        <li>program</li>
+        <li>program</li>
+        <li>program</li>
+        <li>program</li>
+        <li>program</li>
+    </ul>
+    <ul id="j-ebook-list" class="m-ebook-list">
+        <li>ebook</li>
+        <li>ebook</li>
+        <li>ebook</li>
+        <li>ebook</li>
+        <li>ebook</li>
+        <li>ebook</li>
+        <li>ebook</li>
+    </ul>
+    <ul id="j-game-list" class="m-game-list">
+        <li>game</li>
+    </ul>
+    <ul id="j-music-list" class="m-music-list">
+        <li>music</li>
+    </ul>
+</div>
+
+<script>
+    window.onload = (function(window, document) {
+        var oNavCtn = document.getElementById('j-nav-ctn'),
+            oHdCtn = document.getElementById('j-hd-ctn'),
+            oContentCtn = document.getElementById('j-content-ctn'),
+            oNavList = oNavCtn.firstElementChild,
+            oNavChildNodes = oNavList.childNodes,
+            oNavChildNode,
+            oNavChildElementNodes = []
+            ;
+
+        var hdHeight = oHdCtn.clientHeight,
+            scrollTop,
+            isFix
+            ;
+
+        for(var i = 0, l = oNavChildNodes.length; i < l; i ++) {
+            oNavChildNode = oNavChildNodes[i];
+            if(oNavChildNode.nodeType === 1) {
+                oNavChildElementNodes.push(oNavChildNode);
+            }
+        }
+
+        oNavList.addEventListener('click', navListClickHandler);
+
+        function navListClickHandler(e) {
+            var evt = e || event,
+                target = evt.target;
+            evt.stopPropagation();
+            if(target.nodeName.toLocaleUpperCase() === 'A') {
+                setSiblingsNavStyle();
+                target.parentNode.setAttribute('class', 'active');
+            }
+        }
+
+        function setSiblingsNavStyle() {
+            var i = 0,
+                len = oNavChildElementNodes.length,
+                elementNode;
+
+            for(; i < len; i++) {
+                elementNode = oNavChildElementNodes[i];
+                if(elementNode.hasAttribute('class')) {
+                    elementNode.removeAttribute('class');
+                }
+            }
+        }
+
+        window.onscroll = function() {
+            scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+            var cList = oNavCtn.classList;
+            cList = Array.prototype.slice.call(cList);
+            isFix = cList.indexOf('fix') === -1;
+            if (scrollTop > hdHeight && isFix) {
+                setNavFix(cList);
+            }
+            if (hdHeight > scrollTop && !isFix) {
+                setNavStatic(cList);
+            }
+        };
+
+        function setNavFix(classList) {
+            classList.push('fix');
+            oNavCtn.className = classList.join(' ');
+        }
+
+        function setNavStatic(classList) {
+            classList.splice(classList.indexOf('fix'), 1);
+            oNavCtn.className = classList.join(' ');
+        }
+
+
+    })(window, document);
+</script>
+</body>
+</html>

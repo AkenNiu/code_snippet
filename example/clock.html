@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>A Clock</title>
+    <link rel="stylesheet" href="../bower_components/normalize.css/normalize.css"/>
+    <style>
+        html,body{
+            position:relative;
+            width: 100%;
+            height: 100%;
+        }
+        ul{
+            list-style: none;
+        }
+        .g-ctn{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+        }
+        .g-ctn * {
+            margin: 0;
+            padding: 0;
+        }
+        .g-clock-ctn{
+            position: absolute;
+            top: 50%;
+            bottom: 0;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            margin-top: -150px;
+            margin-left: -150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+        }
+        .m-clock-ctn{
+            position: relative;
+            height: 100%;
+        }
+        .m-clock-ctn>li{
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .m-clock-ctn>li>span{
+            display: block;
+            text-align: center;
+        }
+        .m-clock-hour-pointer,
+        .m-clock-min-pointer,
+        .m-clock-second-pointer{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .u-clock-min-pointer,
+        .u-clock-hour-pointer,
+        .u-clock-second-pointer{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            margin-top: -1px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+        .u-clock-hour-pointer{
+            height: 60px;
+            background-color: #000000;
+        }
+        .u-clock-min-pointer{
+            height: 100px;
+            background-color: #000000;
+        }
+        .u-clock-second-pointer{
+            height: 120px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="g-ctn">
+    <div class="g-clock-ctn">
+        <ul id="j-clock-ctn" class="m-clock-ctn">
+            <li><span>12</span></li>
+            <li><span>1</span></li>
+            <li><span>2</span></li>
+            <li><span>3</span></li>
+            <li><span>4</span></li>
+            <li><span>5</span></li>
+            <li><span>6</span></li>
+            <li><span>7</span></li>
+            <li><span>8</span></li>
+            <li><span>9</span></li>
+            <li><span>10</span></li>
+            <li><span>11</span></li>
+        </ul>
+        <div id="j-clock-hour-pointer" class="m-clock-hour-pointer">
+            <span class="u-clock-hour-pointer"></span>
+        </div>
+        <div id="j-clock-min-pointer" class="m-clock-min-pointer">
+            <span class="u-clock-min-pointer"></span>
+        </div>
+        <div id="j-clock-second-pointer" class="m-clock-second-pointer">
+            <span class="u-clock-second-pointer"></span>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = (function (window, document) {
+        var oHourList = document.getElementById('j-clock-ctn'),
+            oHourPointer = document.getElementById('j-clock-hour-pointer'),
+            oMinPointer = document.getElementById('j-clock-min-pointer'),
+            oSecondPointer = document.getElementById('j-clock-second-pointer'),
+            oHourChildNodes = oHourList.childNodes,
+            oHourChildNode,
+            oHourChildElementNodes = []
+            ;
+
+        for(var i = 0, l = oHourChildNodes.length; i < l; i++) {
+            oHourChildNode = oHourChildNodes[i];
+            if(oHourChildNode.nodeType === 1) {
+                oHourChildElementNodes.push(oHourChildNode);
+            }
+        }
+
+        var elementNodesLen = oHourChildElementNodes.length,
+            elementNode,
+            ROTATE_DEG = 30
+            ;
+
+        for(var j = 0; j < elementNodesLen; j ++) {
+            elementNode = oHourChildElementNodes[j];
+            elementNode.style.transform = "rotate(" + ROTATE_DEG * j + "deg)";
+            elementNode.firstElementChild.style.transform = "rotate(" + (360 - ROTATE_DEG * j) + "deg)";
+        }
+
+        init();
+        function init() {
+            getTime(new Date());
+            clockStart();
+        }
+
+        function getTime(date) {
+            var hour = date.getHours(),
+                min = date.getMinutes(),
+                second = date.getSeconds()
+                ;
+            getPointerDeg(hour, min, second);
+        }
+
+        function getPointerDeg(h,m,s) {
+            var hourPointerDeg,
+                minPointerDeg,
+                secondPointerDeg
+                ;
+            hourPointerDeg = 360 - 360 / 24 * h;
+            minPointerDeg = 360 / 60 * m;
+            secondPointerDeg = 360 / 60 * s;
+            setPointerPos(hourPointerDeg, minPointerDeg, secondPointerDeg);
+        }
+
+        function setPointerPos(hDeg,mDeg,sDeg) {
+            oHourPointer.style.transform = "rotate(" + hDeg + "deg)";
+            oMinPointer.style.transform = "rotate(" + mDeg + "deg)";
+            oSecondPointer.style.transform = "rotate(" + sDeg + "deg)";
+        }
+
+
+        function clockStart() {
+            setInterval(function() {
+                getTime(new Date());
+            }, 1000);
+        }
+
+    })(window, document);
+</script>
+</body>
+</html>

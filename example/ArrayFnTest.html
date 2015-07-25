@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ArrayFnTest</title>
+</head>
+<body>
+<a id="alink" href="http://www.baidu.com">百度</a>
+<script>
+    window.onload = function() {
+        var arr = [1, 0, 2, 5, 6];
+        //every()
+        var hasFalseValue = function(value, index, arr) {
+            return value ? true : false;
+        };
+        if(!arr.every(hasFalseValue)) {
+            document.body.appendChild(document.createTextNode('数组中存在非真值'));
+        }
+
+        //filter()
+        var lastElemFilter = function(value, index, arr) {
+            return index === arr.length - 1;
+        };
+
+        console.log(arr.filter(lastElemFilter));
+
+        var aLink = document.getElementById('alink');
+        window.onbeforeunload = function(e) {
+//            var evt = e || event;
+//            if(evt.returnValue) {
+//                evt.returnValue = ' ';
+//            } else {
+//                return ' ';
+//            }
+        };
+
+        function each(arr) {
+            var newArr = [];
+            arr.forEach(function(elem, index) {
+                elem += 2;
+                newArr.push(elem);
+            });
+            return newArr;
+        }
+        each(arr);
+
+
+        var a = [1, 2, 3],
+            b = [2, 3, 4];
+
+        var len = a.length,
+            i = 0,
+            newArr = [];
+
+        for(; i < len; i++) {
+            if(b.indexOf(a[i]) !== -1) {
+                newArr.push(a[i]);
+            }
+        }
+
+        console.log(newArr);
+
+    };
+</script>
+</body>
+</html>
