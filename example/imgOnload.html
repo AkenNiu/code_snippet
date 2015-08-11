@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			font-family: "Microsoft Yahei";
+		}
+		.fadeOut{
+			opacity: 0;
+		}
+		.fadeIn {
+			opacity: 1;
+		}
+		img{
+			max-width: 100%;
+			-webkit-transition: opacity 3s ease-in-out;
+			-o-transition: opacity 3s ease-in-out;
+			transition: opacity 3s ease-in-out;
+		}
+		.ctn{
+			width: 200px;
+			height: 267px;
+			margin-bottom: 10px;
+			background-color: #ddd;
+		}
+	</style>
+</head>
+<body>
+	<h1>jquery single img fade in</h1>
+	<div id="ctn1" class="ctn">
+		
+	</div>
+	<h1>native js img fade in</h1>
+	<div id="ctn2" class="ctn">
+		
+	</div>
+	<h1>jquery multi imgs fade in</h1>
+	<div id="ctn3">
+		<div class="ctn">
+			<img class="multi-imgs" src="../img/1.jpg" alt="">
+		</div>
+		<div class="ctn">
+			<img class="multi-imgs" src="../img/1.jpg" alt="">
+		</div>
+		<div class="ctn">
+			<img class="multi-imgs" src="../img/1.jpg" alt="">
+		</div>
+	</div>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script>
+		//jquery single img
+		$(function() {
+			var $img = $('<img/>'),
+				url = '../img/1.jpg';
+
+			$img.addClass('fadeOut');
+			$img.load(function(e) {
+				if(this.complete) {
+					$(this).removeClass('fadeOut').addClass('fadeIn');
+				}
+			});
+
+			$img.attr('src', url);
+			$('#ctn1').append($img);
+		});
+
+		//jquery multi imgs
+		$(function() {
+			var $imgs = $('.multi-imgs'),
+				url = '../img/1.jpg';
+
+			$imgs.addClass('fadeOut');
+			//$img.on('load', function() {...}) is also correct;
+			$imgs.load(function(e) {
+				if(this.complete) {
+					$imgs.removeClass('fadeOut').addClass('fadeIn');
+				}
+			});
+			$imgs.each(function(index, el) {
+				el.src = url;
+			});
+		});	
+
+		//native js
+		document.addEventListener('DOMContentLoaded', start);
+
+		function  start() {
+			var img = new Image();
+			for (attr in img) {
+				console.log(attr, img[attr]);
+			}
+			img.className = 'fadeOut';
+			img.onload = function(e) {
+				if(img.complete) {
+					img.className = 'fadeIn';
+				}
+			};
+			img.src = '../img/1.jpg';
+			document.querySelector('#ctn2').appendChild(img);
+		}
+
+
+	</script>
+</body>
+</html>
